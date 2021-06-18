@@ -1,0 +1,20 @@
+{
+  "name": "sats_per_dollar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chroma-js": "^2.1.0",
+    "framebuffer": "^1.0.0",
+    "input-event": "^1.2.6",
+    "install": "^0.13.0",
+    "npm": "^6.14.10",
+    "pngjs": "^6.0.0",
+    "websocket": "^1.0.33"
+  }
+}
