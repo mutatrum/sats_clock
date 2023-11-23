@@ -28,24 +28,22 @@ var x, y = -1;
 (async function () {
 
   function exitHandler(options, exitCode) {
-      if (options.cleanup) {
-        if (fb) {
-          fb.blank(true);
-        }
-        if (input) {
-          var result = input.close(() => console.log('closed'));
-          console.log(result);
-        }
+    console.log(`exitHander: ${options.status}`)
+    if (options.cleanup) {
+      if (fb) {
+        fb.blank(true);
       }
-      if (exitCode && exitCode !== 0) console.log(exitCode);
-      if (options.exit) process.exit();
+    }
+    if (exitCode && exitCode !== 0) console.log(exitCode);
+    if (options.exit) process.exit();
+    if (options.reconnect) initWebSocket();
   }
   
-  process.on('exit', exitHandler.bind(null, {cleanup:true}));
-  process.on('SIGINT', exitHandler.bind(null, {exit:true}));
-  process.on('SIGUSR1', exitHandler.bind(null, {exit:true}));
-  process.on('SIGUSR2', exitHandler.bind(null, {exit:true}));
-  process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+  process.on('exit', exitHandler.bind(null, {status: 'exit', exit:true, cleanup:true}));
+  process.on('SIGINT', exitHandler.bind(null, {status: 'SIGINT', exit:true}));
+  process.on('SIGUSR1', exitHandler.bind(null, {status: 'SIGUSR1', exit:true}));
+  process.on('SIGUSR2', exitHandler.bind(null, {status: 'SIGUSR2', exit:true}));
+  process.on('uncaughtException', exitHandler.bind(null, {status: 'uncaughtException', reconnect:true}));
 
   const InputEvent = require('input-event');
  
@@ -104,18 +102,18 @@ function initWebSocket() {
 
   client.on('connectFailed', function(error) {
       console.log('Connect Error: ' + error.toString());
+      connect(client, 5000)
   });
 
   client.on('connect', function(connection) {
       console.log('WebSocket Client Connected');
       connection.on('error', function(error) {
           console.log("Connection Error: " + error.toString());
-          setTimeout(() => client.connect('wss://api-pub.bitfinex.com/ws/2'), 5000);
+          connect(client, 5000)
       });
       connection.on('close', function() {
           console.log('Connection Closed');
-
-          setTimeout(() => client.connect('wss://api-pub.bitfinex.com/ws/2'), 5000);
+          connect(client, 5000)
       });
       connection.on('message', function(message) {
           handleMessage(JSON.parse(message.utf8Data));
@@ -128,13 +126,19 @@ function initWebSocket() {
                   channel: 'ticker', 
                   symbol: 'BTCUSD'
               };
-              connection.sendUTF(JSON.stringify(message));
+              var payload = JSON.stringify(message)
+              setStatus(`Subscribe ${payload}`)
+              connection.sendUTF(payload);
           }
       }
       subscribe();
   });
 
-  client.connect('wss://api-pub.bitfinex.com/ws/2');
+  connect(client, 0)
+}
+
+function connect(client, after) {
+  setTimeout(() => client.connect('wss://api-pub.bitfinex.com/ws/2'), after);
 }
 
 function handleMessage(data) {
@@ -147,7 +151,7 @@ function handleMessage(data) {
     }
   }
   else {
-    setStatus(`WebSocket: ${data.event}`);
+    setStatus(`WebSocket: ${JSON.stringify(data)}`);
   }
 }
 
