@@ -7,7 +7,8 @@ Flash the SD card with [https://www.raspberrypi.org/software/operating-systems/#
 
 When flashed, mount the boot partition.
 
-`touch ssh`
+```bash
+touch ssh```
 
 Enable ssh and wifi.
 
@@ -28,9 +29,9 @@ network={
 
 # First login
 
-`ssh pi@raspberrypi`
-
-`sudo raspi-config`
+```bash
+ssh pi@raspberrypi
+sudo raspi-config```
 
 Update
 
@@ -38,51 +39,59 @@ Advanced Options -> Expand Filesystem
 
 Reboot
 
-`sudo apt-get update`
-`sudo apt-get full-upgrade`
-`sudo apt autoremove`
+```bash
+sudo apt-get update
+sudo apt-get full-upgrade
+sudo apt autoremove```
 
 Install display driver
 
 [https://github.com/pimoroni/hyperpixel4/tree/square](Pimoroni GitHub repository)
 
-`sudo apt-get install git`
-`git clone https://github.com/pimoroni/hyperpixel4 -b square`
-`cd hyperpixel4`
-`sudo ./install.sh`
+```bash
+sudo apt-get install git
+git clone https://github.com/pimoroni/hyperpixel4 -b square
+cd hyperpixel4
+sudo ./install.sh```
 
 reboot
 
-`sudo reboot now`
+```bash
+sudo reboot now```
 
 Display should now show boot stuff.
 
 Disable tty1 output
 
-`sudo nano /boot/cmdline.txt`
+```bash
+sudo nano /boot/cmdline.txt```
 
 append: ` vt.global_cursor_default=0`
 
 Install node.js
 
-`wget https://nodejs.org/dist/latest-v11.x/node-v11.15.0-linux-armv6l.tar.gz`
-`tar xzf node-v11.15.0-linux-armv6l.tar.gz`
-`sudo cp -r * /usr/local`
+```bash
+wget https://nodejs.org/dist/latest-v11.x/node-v11.15.0-linux-armv6l.tar.gz
+tar xzf node-v11.15.0-linux-armv6l.tar.gz
+sudo cp -r * /usr/local```
 
 Test
-`node -v`
+```bash
+node -v```
 v11.15.0
 
 # Install sats_clock
 
-`git clone https://github.com/mutatrum/sats_clock.git`
-`cd sats_clock`
-`npm install`
-`npm audit fix`
+```bash
+git clone https://github.com/mutatrum/sats_clock.git
+cd sats_clock
+npm install
+npm audit fix```
 
 # Install service
 
-`nano /etc/systemd/system/sats_clock.service`
+```bash
+nano /etc/systemd/system/sats_clock.service```
 
 ```
 [Unit]
