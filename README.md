@@ -3,7 +3,7 @@
 
 # Installation
 
-Flash the SD card with [https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit](Raspberry Pi OS Lite (32-bit)).
+Flash the SD card with [Raspberry Pi OS Lite (32-bit)](https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit).
 
 When flashed, mount the boot partition.
 
@@ -49,7 +49,7 @@ sudo apt autoremove
 
 Install display driver
 
-[https://github.com/pimoroni/hyperpixel4/tree/square](Pimoroni GitHub repository)
+[Pimoroni GitHub repository](https://github.com/pimoroni/hyperpixel4/tree/square)
 
 ```bash
 sudo apt-get install git
