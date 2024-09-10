@@ -96,6 +96,8 @@ function initFramebuffer() {
 }
 
 function initWebSocket() {
+  var lastdata = Date.now();
+
   var WebSocketClient = require('websocket').client;
 
   var client = new WebSocketClient();
@@ -129,12 +131,20 @@ function initWebSocket() {
               var payload = JSON.stringify(message)
               setStatus(`Subscribe ${payload}`)
               connection.sendUTF(payload);
+
+              lastdata = Date.now();
           }
       }
       subscribe();
   });
 
   connect(client, 0)
+
+  setInterval(() => {
+    if (lastdata == 0) return
+
+    if (Date.now() - lastdata > 60000) client.close()
+  }, 10000)
 }
 
 function connect(client, after) {
