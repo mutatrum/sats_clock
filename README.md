@@ -8,7 +8,8 @@ Flash the SD card with [https://www.raspberrypi.org/software/operating-systems/#
 When flashed, mount the boot partition.
 
 ```bash
-touch ssh```
+touch ssh
+```
 
 Enable ssh and wifi.
 
@@ -31,7 +32,8 @@ network={
 
 ```bash
 ssh pi@raspberrypi
-sudo raspi-config```
+sudo raspi-config
+```
 
 Update
 
@@ -42,7 +44,8 @@ Reboot
 ```bash
 sudo apt-get update
 sudo apt-get full-upgrade
-sudo apt autoremove```
+sudo apt autoremove
+```
 
 Install display driver
 
@@ -52,19 +55,22 @@ Install display driver
 sudo apt-get install git
 git clone https://github.com/pimoroni/hyperpixel4 -b square
 cd hyperpixel4
-sudo ./install.sh```
+sudo ./install.sh
+```
 
 reboot
 
 ```bash
-sudo reboot now```
+sudo reboot now
+```
 
 Display should now show boot stuff.
 
 Disable tty1 output
 
 ```bash
-sudo nano /boot/cmdline.txt```
+sudo nano /boot/cmdline.txt
+```
 
 append: ` vt.global_cursor_default=0`
 
@@ -73,12 +79,14 @@ Install node.js
 ```bash
 wget https://nodejs.org/dist/latest-v11.x/node-v11.15.0-linux-armv6l.tar.gz
 tar xzf node-v11.15.0-linux-armv6l.tar.gz
-sudo cp -r * /usr/local```
+sudo cp -r * /usr/local
+```
 
 Test
 ```bash
-node -v```
-v11.15.0
+node -v
+```
+`v11.15.0`
 
 # Install sats_clock
 
@@ -86,12 +94,14 @@ v11.15.0
 git clone https://github.com/mutatrum/sats_clock.git
 cd sats_clock
 npm install
-npm audit fix```
+npm audit fix
+```
 
 # Install service
 
 ```bash
-nano /etc/systemd/system/sats_clock.service```
+nano /etc/systemd/system/sats_clock.service
+```
 
 ```
 [Unit]
