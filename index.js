@@ -72,9 +72,9 @@ var x, y = -1;
           y = -1;
         }
         break;
-      // default:
-      //   console.log(JSON.stringify(event));
-      //   break;
+      default:
+        console.log(JSON.stringify(event));
+        break;
     }
   });
 
@@ -110,7 +110,7 @@ function initWebSocket() {
   client.on('connect', function(connection) {
       const intervalId = setInterval(() => {
         if (lastdata == 0) return
-        console.log(`Last timestamp: ${lastdata}`)
+        // console.log(`Last timestamp: ${lastdata}`)
         if (Date.now() - lastdata > 60000) connection.close(4000, 'Stale connection')
       }, 10000)
 
@@ -162,7 +162,7 @@ function handleMessage(data) {
     if (Array.isArray(message)) {
       var price = message[6];
       currentSats = Math.floor(1e8 / price);
-      console.log(`${currentSats} sats per dollar`);
+      // console.log(`${currentSats} sats per dollar`);
     }
   }
   else {
