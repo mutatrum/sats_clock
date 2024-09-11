@@ -108,12 +108,19 @@ function initWebSocket() {
   });
 
   client.on('connect', function(connection) {
+      const intervalId = setInterval(() => {
+        if (lastdata == 0) return
+        if (Date.now() - lastdata > 60000) connection.close()
+      }, 10000)
+
       console.log('WebSocket Client Connected');
+
       connection.on('error', function(error) {
           console.log("Connection Error: " + error.toString());
           connect(client, 5000)
       });
       connection.on('close', function() {
+          clearInterval(intervalId)
           console.log('Connection Closed');
           connect(client, 5000)
       });
@@ -136,15 +143,11 @@ function initWebSocket() {
           }
       }
       subscribe();
+
+    
   });
 
   connect(client, 0)
-
-  setInterval(() => {
-    if (lastdata == 0) return
-
-    if (Date.now() - lastdata > 60000) client.close()
-  }, 10000)
 }
 
 function connect(client, after) {
