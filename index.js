@@ -52,28 +52,16 @@ var x, y = -1;
   const mouse = new InputEvent.Mouse(input);
    
   mouse.on('data', (event) => {
+    console.log(JSON.stringify(event));
     switch(event.code) {
       case 0x00: 
         x = event.value;
-        if (drag && y != -1) {
-          console.log(`${x} ${y}`);
-        }
         break;
       case 0x01: 
         y = event.value;
-        if (drag && x != -1) {
-          console.log(`${x} ${y}`);
-        }
         break;
-      case 0x39:
-        drag = event.value != -1;
-        if (!drag) {
-          x = -1;
-          y = -1;
-        }
-        break;
-      default:
-        console.log(JSON.stringify(event));
+      case 0x14A:
+        console.log(`${x} ${y}`);
         break;
     }
   });
