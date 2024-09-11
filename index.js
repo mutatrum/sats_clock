@@ -53,16 +53,12 @@ var x, y = -1;
    
   mouse.on('data', (event) => {
     console.log(JSON.stringify(event));
-    switch(event.code) {
-      case 0x00: 
-        x = event.value;
-        break;
-      case 0x01: 
-        y = event.value;
-        break;
-      case 0x14A:
-        console.log(`${x} ${y}`);
-        break;
+    if (event.type == 3) {
+      if (event.code == 0) x = event.value;
+      if (event.code == 1) y = event.value;
+    }
+    if (event.type == 1 && event.code == 330) {
+      console.log(`${x} ${y}`);
     }
   });
 
