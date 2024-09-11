@@ -110,7 +110,8 @@ function initWebSocket() {
   client.on('connect', function(connection) {
       const intervalId = setInterval(() => {
         if (lastdata == 0) return
-        if (Date.now() - lastdata > 60000) connection.close()
+        console.log(`Last timestamp: {}`, lastdata)
+        if (Date.now() - lastdata > 60000) connection.close(4000, 'Stale connection')
       }, 10000)
 
       console.log('WebSocket Client Connected');
@@ -160,7 +161,7 @@ function handleMessage(data) {
     if (Array.isArray(message)) {
       var price = message[6];
       currentSats = Math.floor(1e8 / price);
-      // console.log(`${currentSats} sats per dollar`);
+      console.log(`${currentSats} sats per dollar`);
     }
   }
   else {
