@@ -47,7 +47,7 @@ var x, y = -1;
 
   const InputEvent = require('input-event');
  
-  input = new InputEvent('/dev/input/event0');
+  input = new InputEvent('/dev/input/mouse0');
    
   const mouse = new InputEvent.Mouse(input);
    
