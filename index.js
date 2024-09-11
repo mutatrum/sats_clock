@@ -51,7 +51,7 @@ var x, y = -1;
    
   const mouse = new InputEvent.Mouse(input);
    
-  mouse.on('touch', (event) => {
+  mouse.on('data', (event) => {
     switch(event.code) {
       case 0x00: 
         x = event.value;
