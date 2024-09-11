@@ -110,7 +110,7 @@ function initWebSocket() {
   client.on('connect', function(connection) {
       const intervalId = setInterval(() => {
         if (lastdata == 0) return
-        console.log(`Last timestamp: {}`, lastdata)
+        console.log(`Last timestamp: ${lastdata}`)
         if (Date.now() - lastdata > 60000) connection.close(4000, 'Stale connection')
       }, 10000)
 
@@ -120,12 +120,13 @@ function initWebSocket() {
           console.log("Connection Error: " + error.toString());
           connect(client, 5000)
       });
-      connection.on('close', function() {
+      connection.on('close', function(event) {
           clearInterval(intervalId)
-          console.log('Connection Closed');
+          console.log(`Connection Closed: ${event}`);
           connect(client, 5000)
       });
       connection.on('message', function(message) {
+          lastdata = Date.now();
           handleMessage(JSON.parse(message.utf8Data));
       });
 
