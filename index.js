@@ -100,18 +100,18 @@ function initWebSocket() {
 
       console.log('WebSocket Client Connected');
 
-      connection.on('error', function(error) {
-          console.log("Connection Error: " + error.toString());
+      connection.on('error', function(err) {
+          console.log("Connection Error: " + err.toString());
           connect(client, 5000)
       });
-      connection.on('close', function(event) {
+      connection.on('close', function(code, desc) {
           clearInterval(intervalId)
-          console.log(`Connection Closed: ${event}`);
+          console.log(`Connection Closed: ${desc} (${code})`);
           connect(client, 5000)
       });
-      connection.on('message', function(message) {
+      connection.on('message', function(data) {
           lastdata = Date.now();
-          handleMessage(JSON.parse(message.utf8Data));
+          handleMessage(JSON.parse(data.utf8Data));
       });
 
       function subscribe() {
