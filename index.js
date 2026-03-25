@@ -52,12 +52,11 @@ var x, y = -1;
   const mouse = new InputEvent.Mouse(input);
    
   mouse.on('data', (event) => {
-    console.log(JSON.stringify(event));
     if (event.type == 3) {
       if (event.code == 0) x = event.value;
       if (event.code == 1) y = event.value;
     }
-    if (event.type == 1 && event.code == 330) {
+    if (event.type == 0 && event.code == 0) {
       console.log(`${x} ${y}`);
     }
   });
@@ -81,6 +80,7 @@ function initFramebuffer() {
 
 function initWebSocket() {
   var lastdata = Date.now();
+  var reconnecting = false;
 
   var WebSocketClient = require('websocket').client;
 
@@ -88,7 +88,7 @@ function initWebSocket() {
 
   client.on('connectFailed', function(error) {
       console.log('Connect Error: ' + error.toString());
-      connect(client, 5000)
+      scheduleReconnect()
   });
 
   client.on('connect', function(connection) {
@@ -98,16 +98,16 @@ function initWebSocket() {
         if (Date.now() - lastdata > 60000) connection.close(4000, 'Stale connection')
       }, 10000)
 
-      console.log('WebSocket Client Connected');
+      console.log(`WebSocket connected to ${connection.remoteAddress}`);
 
       connection.on('error', function(err) {
           console.log("Connection Error: " + err.toString());
-          connect(client, 5000)
+          scheduleReconnect()
       });
       connection.on('close', function(code, desc) {
           clearInterval(intervalId)
           console.log(`Connection Closed: ${desc} (${code})`);
-          connect(client, 5000)
+          scheduleReconnect()
       });
       connection.on('message', function(data) {
           lastdata = Date.now();
@@ -129,16 +129,21 @@ function initWebSocket() {
           }
       }
       subscribe();
-
-    
   });
 
-  connect(client, 0)
+  scheduleReconnect()
+
+  function scheduleReconnect() {
+    if (reconnecting) return;
+    reconnecting = true;
+    console.log('Scheduling reconnect in 5 seconds...');
+    setTimeout(() => {
+      reconnecting = false;
+      client.connect('wss://api-pub.bitfinex.com/ws/2');
+    }, 5000);
+  }
 }
 
-function connect(client, after) {
-  setTimeout(() => client.connect('wss://api-pub.bitfinex.com/ws/2'), after);
-}
 
 function handleMessage(data) {
   if (Array.isArray(data)) {
